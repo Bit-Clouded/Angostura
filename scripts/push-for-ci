@@ -5,4 +5,4 @@ source version-artifact
 
 docker login -u $DH_USERNAME -p $DH_PASSWORD
 docker push ${BC_PVTDEV_REGISTRY}/${BC_TAG_NAME}
-docker push ${BC_PVTDEV_REGISTRY}/${BC_DOCKER_IMAGE_NAME}:latest
+#docker push ${BC_PVTDEV_REGISTRY}/${BC_DOCKER_IMAGE_NAME}:latest
