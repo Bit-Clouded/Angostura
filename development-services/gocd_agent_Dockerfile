@@ -1,0 +1,37 @@
+FROM openjdk:8u111-jdk
+
+RUN apt-get install -qqy \
+    ca-certificates \
+    curl \
+    openssl
+
+ENV DOCKER_BUCKET get.docker.com
+ENV DOCKER_VERSION 1.11.2
+#ENV DOCKER_SHA256 626601deb41d9706ac98da23f673af6c0d4631c4d194a677a9a1a07d7219fa0f
+
+RUN set -x \
+    && curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
+    #&& echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
+    && tar -xzvf docker.tgz \
+    && mv docker/* /usr/local/bin/ \
+    && rmdir docker \
+    && rm docker.tgz \
+    && docker -v
+
+ARG GO_VERSION="16.8.0-3929"
+ARG DOWNLOAD_URL="https://download.go.cd/binaries"
+ENV TINI_VERSION v0.9.0
+
+VOLUME [ "/sys/fs/cgroup" ]
+
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
+
+ADD $DOWNLOAD_URL/$GO_VERSION/deb/go-agent_${GO_VERSION}_all.deb /tmp/go-agent.deb
+
+RUN dpkg -i /tmp/go-agent.deb && \
+    apt-get install -fqqy
+
+# Run your program under Tini
+CMD PRODUCTION_MODE=N /usr/share/go-agent/agent.sh
