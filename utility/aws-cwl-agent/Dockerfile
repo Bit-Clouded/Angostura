@@ -9,9 +9,9 @@ RUN python /home/local/awslogs-agent-setup.py \
         -c /home/local/default.conf \
         -n && \
     service awslogs stop
-RUN rm /home/local/awslogs-agent-setup.py && \
-    rm /var/log/awslogs.log && \
-    rm /var/awslogs/state/agent-state
+RUN rm -f /home/local/awslogs-agent-setup.py && \
+    rm -f /var/log/awslogs.log && \
+    rm -f /var/awslogs/state/agent-state
     
 VOLUME ["/var/awslogs/state/"]
     
