@@ -1,4 +1,15 @@
-#!/bin/sh
+#!/bin/bash
+
+if [ "$1" = "cron" ]; then
+  while [ true ]
+  do
+    /aws-scripts-mon/mon-put-instance-data.pl \
+      --mem-util --mem-used --mem-avail \
+      --swap-util --swap-used \
+      --auto-scaling > /dev/null
+    sleep 30
+  done
+fi
 
 EC2_AVAIL_ZONE=`curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`
 EC2_REGION="`echo \"$EC2_AVAIL_ZONE\" | sed -e 's:\([0-9][0-9]*\)[a-z]*\$:\\1:'`"
@@ -16,7 +27,7 @@ PIDFILE=/var/awslogs/state/awslogs.pid
 LOCKFILE=/var/awslogs/state/awslogs.lock
 MUTEXFILE=/var/awslogs/state/awslogs.mutex
 
-sed -i "s/{{aws-region}}/$EC2_REGION/g" $DAEMON
+sed -i "s/{{aws-region}}/$EC2_REGION/g" /var/awslogs/etc/aws.conf
 sed -i "s/{{syslog-cwl-group}}/$SYSLOG/g" $CONFIG_FILE
 sed -i "s/{{authlog-cwl-group}}/$AUTHLOG/g" $CONFIG_FILE
 
