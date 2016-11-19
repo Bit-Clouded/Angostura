@@ -1,8 +1,9 @@
-FROM elasticsearch:5.0.0
+FROM elasticsearch:2.4.1
 
 # Install plugins
-RUN ./bin/elasticsearch-plugin install discovery-ec2 --batch && \
-    ./bin/elasticsearch-plugin install repository-s3 --batch
+RUN ./bin/plugin install cloud-aws && \
+    ./bin/plugin install lmenezes/elasticsearch-kopf/v2.1.1 && \
+    ./bin/plugin install royrusso/elasticsearch-HQ/v2.0.3
 	
 ADD limits.conf /etc/security/
 ADD elasticsearch.yml ./config/
