@@ -4,5 +4,5 @@ FROM elasticsearch:5.0.0
 RUN ./bin/elasticsearch-plugin install discovery-ec2 --batch && \
     ./bin/elasticsearch-plugin install repository-s3 --batch
 	
-ADD limits.conf /etc/security/
-ADD elasticsearch.yml ./config/
+ADD ./conf/limits.conf /etc/security/
+ADD ./conf/elasticsearch.yml ./config/
