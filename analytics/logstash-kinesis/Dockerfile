@@ -1,25 +1,13 @@
-FROM java:8
-ARG LS_TAR_NAME=logstash-2.2.2
-ARG LS_TAR_URL=https://download.elastic.co/logstash/logstash/
+FROM logstash:2.4.1-1
 
-# Create directory
-RUN mkdir /home/local
-WORKDIR /home/local
+RUN logstash-plugin install logstash-input-kinesis && \
+    logstash-plugin install logstash-output-elasticsearch
 
-# Download
-RUN wget ${LS_TAR_URL}${LS_TAR_NAME}.tar.gz && \
-    tar --strip-components 1 -xvf ${LS_TAR_NAME}.tar.gz && \
-    rm ${LS_TAR_NAME}.tar.gz
-
-# Install plugins
-RUN ./bin/plugin install logstash-input-kinesis && \
-    ./bin/plugin install logstash-output-elasticsearch
-
-# Add files
-ADD worker.rb ./vendor/bundle/jruby/1.9/gems/logstash-input-kinesis-1.4.3-java/lib/logstash/inputs/kinesis/
+RUN mkdir -p /bc/temp/
+WORKDIR /bc/
 ADD ls-aws-cwl.conf ./
-ADD aws-log-init.sh ./
-RUN chmod +x ./aws-log-init.sh
+ADD entrypoint.sh ./
+RUN chmod +x ./entrypoint.sh
 
 # Create user and assign permission
-ENTRYPOINT ["/home/local/aws-log-init.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
