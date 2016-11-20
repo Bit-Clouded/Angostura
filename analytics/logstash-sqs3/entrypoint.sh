@@ -19,4 +19,4 @@ sed -i "s/{{raw-log-bucket}}/$RAW_BUCKET/g" ./ls-aws-sqs3.conf
 sed -i "s/{{s3-access-log-bucket}}/$S3_BUCKET/g" ./ls-aws-sqs3.conf
 sed -i "s/{{cf-access-log-bucket}}/$CF_BUCKET/g" ./ls-aws-sqs3.conf
 
-#./bin/logstash -f ./ls-aws-sqs3.conf
+logstash -f ./ls-aws-sqs3.conf
