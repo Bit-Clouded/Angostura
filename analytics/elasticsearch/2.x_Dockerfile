@@ -1,0 +1,9 @@
+FROM elasticsearch:2.4.1
+
+# Install plugins
+RUN ./bin/plugin install cloud-aws && \
+    ./bin/plugin install lmenezes/elasticsearch-kopf/v2.1.1 && \
+    ./bin/plugin install royrusso/elasticsearch-HQ/v2.0.3
+	
+ADD ./conf/limits.conf /etc/security/
+ADD ./conf/elasticsearch.yml ./config/
