@@ -22,5 +22,6 @@ RUN curl -o arcanist.zip -J -L https://github.com/phacility/arcanist/archive/$ar
 ADD ./phabricator.conf /etc/nginx/conf.d/default.conf
 ADD ./init.sh ./
 ADD ./preamble.php /home/local/phabricator/support/
+RUN chmod +x ./init.sh
 
 CMD ["/home/local/init.sh"]
