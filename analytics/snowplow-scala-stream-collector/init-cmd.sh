@@ -16,6 +16,8 @@ BYTE_THRESHOLD=2500
 RECORD_THRESHOLD=250
 TIME_THRESHOLD=250
 
+LOG_LEVEL=INFO
+
 # Externally Fed Variables
 sed -i "s/{{collectorKinesisStreamGoodName}}/$STREAM_GOOD/g" ./config.hocon
 sed -i "s/{{collectorKinesisStreamBadName}}/$STREAM_BAD/g" ./config.hocon
@@ -31,5 +33,7 @@ sed -i "s/{{collectorSinkBufferByteThreshold}}/$BYTE_THRESHOLD/g" ./config.hocon
 sed -i "s/{{collectorSinkBufferRecordThreshold}}/$RECORD_THRESHOLD/g" ./config.hocon
 sed -i "s/{{collectorSinkBufferTimeThreshold}}/$TIME_THRESHOLD/g" ./config.hocon
 
+# Change log level
+sed -i "s/loglevel = DEBUG/loglevel = $LOG_LEVEL/g" ./config.hocon
 echo Starting...
 java -jar ./$SSSC_JAR --config ./config.hocon
