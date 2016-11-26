@@ -41,4 +41,4 @@ sed -i "s/{{collectorCookieName}}/$COOKIE_NAME/g" ./config.hocon
 # Change log level
 sed -i "s/loglevel = DEBUG/loglevel = $LOG_LEVEL/g" ./config.hocon
 echo Starting...
-java -jar ./$SSSC_JAR --config ./config.hocon
+java -jar ./$SSE_JAR --config ./config.hocon --resolver file:./resolver.config

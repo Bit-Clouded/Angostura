@@ -3,6 +3,7 @@ FROM openjdk:8u111-jdk
 RUN mkdir -p /snowplow
 WORKDIR /snowplow
 ADD ./config.hocon ./
+ADD ./resolver.config ./
 ADD ./init-cmd.sh ./
 RUN chmod +x ./init-cmd.sh
 
