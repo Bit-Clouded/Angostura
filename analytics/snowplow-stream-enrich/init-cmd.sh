@@ -16,7 +16,7 @@ BYTE_THRESHOLD=2500
 RECORD_THRESHOLD=250
 TIME_THRESHOLD=250
 
-LOG_LEVEL=INFO
+LOG_LEVEL=WARN
 
 # Externally Fed Variables
 sed -i "s/{{enrichStreamsInRaw}}/$STREAM_SOURCE/g" ./config.hocon
@@ -28,15 +28,9 @@ sed -i "s/{{enrichStreamsOutBad}}/$STREAM_BAD/g" ./config.hocon
 sed -i "s/{{enrichStreamsBufferByteThreshold}}/$BYTE_THRESHOLD/g" ./config.hocon
 sed -i "s/{{enrichStreamsBufferRecordThreshold}}/$RECORD_THRESHOLD/g" ./config.hocon
 sed -i "s/{{enrichStreamsBufferTimeThreshold}}/$TIME_THRESHOLD/g" ./config.hocon
-
 sed -i "s/{{enrichStreamsOutMinBackoff}}/$MIN_BACKOFF/g" ./config.hocon
 sed -i "s/{{enrichStreamsOutMaxBackoff}}/$MAX_BACKOFF/g" ./config.hocon
-
 sed -i "s/{{enrichStreamsRegion}}/$EC2_REGION/g" ./config.hocon
-
-sed -i "s/{{collectorPort}}/$COLLECTOR_PORT/g" ./config.hocon
-sed -i "s/{{collectorCookieExpiration}}/$COOKIE_EXPIRATION/g" ./config.hocon
-sed -i "s/{{collectorCookieName}}/$COOKIE_NAME/g" ./config.hocon
 
 # Change log level
 sed -i "s/loglevel = DEBUG/loglevel = $LOG_LEVEL/g" ./config.hocon

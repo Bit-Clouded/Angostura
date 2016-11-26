@@ -102,3 +102,10 @@ enrich {
   #  }
   #}
 }
+
+# Akka has a variety of possible configuration options defined at
+# http://doc.akka.io/docs/akka/2.2.3/general/configuration.html.
+akka {
+  loglevel = DEBUG # 'OFF' for no logging, 'DEBUG' for all logging.
+  loggers = ["akka.event.slf4j.Slf4jLogger"]
+}
