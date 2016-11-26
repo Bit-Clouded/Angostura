@@ -17,19 +17,19 @@ RECORD_THRESHOLD=250
 TIME_THRESHOLD=250
 
 # Externally Fed Variables
-sed -i "s/{{collectorKinesisStreamGoodName}}/$STREAM_GOOD/g" ./conifg.hocon
-sed -i "s/{{collectorKinesisStreamBadName}}/$STREAM_BAD/g" ./conifg.hocon
+sed -i "s/{{collectorKinesisStreamGoodName}}/$STREAM_GOOD/g" ./config.hocon
+sed -i "s/{{collectorKinesisStreamBadName}}/$STREAM_BAD/g" ./config.hocon
 
 # Internal Variables
-sed -i "s/{{collectorPort}}/$COLLECTOR_PORT/g" ./conifg.hocon
-sed -i "s/{{collectorCookieExpiration}}/$COOKIE_EXPIRATION/g" ./conifg.hocon
-sed -i "s/{{collectorCookieName}}/$COOKIE_NAME/g" ./conifg.hocon
-sed -i "s/{{collectorSinkKinesisStreamRegion}}/$EC2_REGION/g" ./conifg.hocon
-sed -i "s/{{collectorSinkKinesisMinBackoffMillis}}/$MIN_BACKOFF/g" ./conifg.hocon
-sed -i "s/{{collectorSinkKinesisMaxBackoffMillis}}/$MAX_BACKOFF/g" ./conifg.hocon
-sed -i "s/{{collectorSinkBufferByteThreshold}}/$BYTE_THRESHOLD/g" ./conifg.hocon
-sed -i "s/{{collectorSinkBufferRecordThreshold}}/$RECORD_THRESHOLD/g" ./conifg.hocon
-sed -i "s/{{collectorSinkBufferTimeThreshold}}/$TIME_THRESHOLD/g" ./conifg.hocon
+sed -i "s/{{collectorPort}}/$COLLECTOR_PORT/g" ./config.hocon
+sed -i "s/{{collectorCookieExpiration}}/$COOKIE_EXPIRATION/g" ./config.hocon
+sed -i "s/{{collectorCookieName}}/$COOKIE_NAME/g" ./config.hocon
+sed -i "s/{{collectorSinkKinesisStreamRegion}}/$EC2_REGION/g" ./config.hocon
+sed -i "s/{{collectorSinkKinesisMinBackoffMillis}}/$MIN_BACKOFF/g" ./config.hocon
+sed -i "s/{{collectorSinkKinesisMaxBackoffMillis}}/$MAX_BACKOFF/g" ./config.hocon
+sed -i "s/{{collectorSinkBufferByteThreshold}}/$BYTE_THRESHOLD/g" ./config.hocon
+sed -i "s/{{collectorSinkBufferRecordThreshold}}/$RECORD_THRESHOLD/g" ./config.hocon
+sed -i "s/{{collectorSinkBufferTimeThreshold}}/$TIME_THRESHOLD/g" ./config.hocon
 
 echo Starting...
 java -jar ./$SSSC_JAR --config ./config.hocon

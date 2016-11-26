@@ -4,7 +4,7 @@ RUN mkdir -p /snowplow
 WORKDIR /snowplow
 ADD ./config.hocon ./
 ADD ./init-cmd.sh ./
-RUN cmod +x ./init-cmd.sh
+RUN chmod +x ./init-cmd.sh
 
 ENV SSSC_VERSION 0.9.0
 ENV SSSC_JAR snowplow-stream-collector-$SSSC_VERSION
