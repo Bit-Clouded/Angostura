@@ -36,4 +36,4 @@ sed -i "s/{{sinkLzoBufferTimeThreshold}}/$TIME_THRESHOLD/g" ./config.hocon
 sed -i "s/{{sinkLzoLogLevel}}/$LOG_LEVEL/g" ./config.hocon
 
 echo Starting...
-java -jar ./$SSE_JAR --config ./config.hocon --resolver file:./resolver.config
+java -jar ./$SKS_JAR --config ./config.hocon
