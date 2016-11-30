@@ -65,12 +65,12 @@ sink {
   }
 
   # Optional section for tracking endpoints
-  monitoring {
-    snowplow {
-      collector-uri: "{{collectorUri}}"
-      collector-port: 80
-      app-id: "{{sinkLzoAppName}}"
-      method: "GET"
-    }
-  }
+  #monitoring {
+  #  snowplow {
+  #    collector-uri: "{{collectorUri}}"
+  #    collector-port: 80
+  #    app-id: "{{sinkLzoAppName}}"
+  #    method: "GET"
+  #  }
+  #}
 }
