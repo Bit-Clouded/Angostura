@@ -46,6 +46,7 @@ sink {
     region: "{{sinkKinesisS3Region}}"
     bucket: "{{sinkKinesisS3Bucket}}"
     max-timeout: "{{sinkKinesisS3MaxTimeout}}"
+    format: "lzo"
   }
 
   # Events are accumulated in a buffer before being sent to S3.
