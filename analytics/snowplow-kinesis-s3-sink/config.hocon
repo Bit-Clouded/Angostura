@@ -45,6 +45,7 @@ sink {
     # http://s3-eu-west-1.amazonaws.com
     region: "{{sinkKinesisS3Region}}"
     bucket: "{{sinkKinesisS3Bucket}}"
+    max-timeout: "{{sinkKinesisS3MaxTimeout}}"
   }
 
   # Events are accumulated in a buffer before being sent to S3.

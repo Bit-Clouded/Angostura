@@ -15,6 +15,7 @@ MAX_BACKOFF=100000
 BYTE_THRESHOLD=50000000 #50MB
 RECORD_THRESHOLD=5000000 #5mil
 TIME_THRESHOLD=300000 #5min
+BUCKET_TIMEOUT=1200000 #20min
 # Yes I'm obsessed with 5.
 
 LOG_LEVEL=WARN
@@ -24,6 +25,7 @@ sed -i "s/{{sinkKinesisInStreamName}}/$STREAM_SOURCE/g" ./config.hocon
 sed -i "s/{{sinkKinesisAppName}}/$DDB_CHECKPOINT/g" ./config.hocon
 sed -i "s/{{sinkKinesisOutStreamName}}/$STREAM_BAD/g" ./config.hocon
 sed -i "s/{{sinkKinesisS3Bucket}}/$BUCKET_NAME/g" ./config.hocon
+sed -i "s/{{sinkKinesisS3MaxTimeout}}/$BUCKET_TIMEOUT/g" ./config.hocon
 
 # Internal Variables
 sed -i "s/{{sinkKinesisRegion}}/$EC2_REGION/g" ./config.hocon
