@@ -5,7 +5,7 @@ RUN logstash-plugin install logstash-input-kinesis && \
 
 RUN mkdir -p /bc/temp/
 WORKDIR /bc/
-ADD ls-aws-cwl.conf ./
+ADD ls-snowplow-es.conf ./
 ADD entrypoint.sh ./
 RUN chmod +x ./entrypoint.sh
 
