@@ -21,10 +21,16 @@ RUN setx PATH '%PATH%;C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\msbuild.exe;C
 RUN Install-WindowsFeature NET-Framework-45-ASPNET,Web-Asp-Net45
 # Additional ASP.Net stuff
 RUN Invoke-WebRequest "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -OutFile "C:\workspace\nuget.exe" -UseBasicParsing  
+RUN mkdir -force 'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v12.0'; \
+    cd 'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v12.0'; \
+    Start-Process -FilePath "C:\workspace\nuget.exe" -ArgumentList "Install","MSBuild.Microsoft.VisualStudio.Web.targets","-Version","12.0.1" -PassThru -Wait; \ 
+    mv 'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v12.0\\MSBuild.Microsoft.VisualStudio.Web.targets.12.0.1\\tools\\VSToolsPath\\*' \
+    'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v12.0\\'
 RUN mkdir -force 'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v14.0'; \
     cd 'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v14.0'; \ 
-    Start-Process -FilePath "C:\workspace\nuget.exe" -ArgumentList "Install","MSBuild.Microsoft.VisualStudio.Web.targets","-Version","14.0.0.3" -PassThru -Wait  
-RUN mv \
-    'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v14.0\\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\\tools\\VSToolsPath\\*' \
+    Start-Process -FilePath "C:\workspace\nuget.exe" -ArgumentList "Install","MSBuild.Microsoft.VisualStudio.Web.targets","-Version","14.0.0.3" -PassThru -Wait; \  
+    mv 'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v14.0\\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\\tools\\VSToolsPath\\*' \
     'C:\\Program Files (x86)\\MSBuild\\Microsoft\\VisualStudio\\v14.0\\'
 RUN .'C:\\Program Files\\Microsoft\\Web Platform Installer\\WebPiCmd.exe' /Install /Products:'WDeploy36' /AcceptEULA
+
+ENTRYPOINT ["Powershell"]
