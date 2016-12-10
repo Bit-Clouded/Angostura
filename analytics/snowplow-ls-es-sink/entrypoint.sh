@@ -9,4 +9,6 @@ sed -i "s/{{stream-name}}/$STREAM_SOURCE/g" ./ls-snowplow-es.conf
 sed -i "s/{{checkpoint-ddb}}/$DDB_CHECKPOINT/g" ./ls-snowplow-es.conf
 sed -i "s/{{es-host}}/$ES_HOST/g" ./ls-snowplow-es.conf
 
+sed -i "s/{{index-name}}/${STREAM_SOURCE,,}/g" ./ls-snowplow-es.conf
+
 logstash -f ./ls-snowplow-es.conf
