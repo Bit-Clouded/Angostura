@@ -1,0 +1,26 @@
+{
+    "variables": {
+        "source_ami": "ami-e94e5e8a",
+        "name": "ubuntu-lst-16.04-base",
+        "ssh_username": "ubuntu"
+    },
+    "builders": [
+        {
+            "name": "{{user `name`}}",
+            "type": "amazon-ebs",
+            "region": "ap-southeast-2",
+            "vpc_id": "",
+            "subnet_id": "subnet-2b1cbe72",
+            "source_ami": "{{user `source_ami`}}",
+            "instance_type": "t2.micro",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ssh_timeout": "10m",
+            "ami_name": "{{user `name`}}-{{timestamp}}",
+            "ami_description": "Ubuntu LTS 16.04 with Docker and AWS SSM installed."
+        }
+    ],
+    "provisioners": [{
+        "type": "shell",
+        "scripts": ["install-docker.sh","install-ssm-agent.sh"]
+    }]
+}
