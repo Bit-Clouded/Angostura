@@ -1,14 +1,12 @@
-FROM logstash:2.4.1-1
+FROM docker.elastic.co/logstash/logstash:5.6.1
 
-RUN logstash-plugin install --version 2.0.6 logstash-input-s3 && \
-    logstash-plugin install logstash-output-elasticsearch && \
-	logstash-plugin install logstash-filter-fingerprint
-
+USER root
 RUN mkdir -p /bc/temp/
 WORKDIR /bc/
 ADD ls-aws-sqs3.conf ./
 ADD entrypoint.sh ./
+ADD logstash.yml /usr/share/logstash/config/
 RUN chmod +x ./entrypoint.sh
-ADD s3.rb /opt/logstash/vendor/bundle/jruby/1.9/gems/logstash-input-s3-2.0.6/lib/logstash/inputs/
+ADD s3.rb /usr/share/logstash/vendor/bundle/jruby/1.9/gems/logstash-input-s3-3.1.6/lib/logstash/inputs/
 
 ENTRYPOINT ["./entrypoint.sh"]
