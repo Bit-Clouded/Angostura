@@ -162,6 +162,7 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
     # Currently codecs operates on bytes instead of stream.
     # So all IO stuff: decompression, reading need to be done in the actual
     # input and send as bytes to the codecs.
+    @logger.info("Processing file: ", :bucket => objBucket, :key => key)
     read_file(filename) do |line|
       if stop?
         @logger.warn("Logstash S3 input, stop reading in the middle of the file, we will read it again when logstash is started")
@@ -250,7 +251,20 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
     File.open(filename) do |zio|
       while true do
         io = Zlib::GzipReader.new(zio)
-        io.each_line { |line| block.call(line) }
+        begin
+          Timeout::timeout(10) do
+            @logger.info("Start processing content...")
+            Thread.new{
+              begin
+                io.each_line { |line| block.call(line) }
+              rescue
+                @logger.info("Processing thread crash")
+              end
+            }.join
+          end
+        rescue Timeout::Error
+          @logger.info("Timed out")
+        end
         unused = io.unused
         io.finish
         break if unused.nil?
