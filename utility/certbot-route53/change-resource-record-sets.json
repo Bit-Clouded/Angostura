@@ -1,0 +1,18 @@
+{
+    "Comment": "ecma dns challenge",
+    "Changes": [
+        {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "_acme-challenge.{{VALIDATION_DOMAIN}}",
+                "Type": "TXT",
+                "TTL": 1,
+                "ResourceRecords": [
+                    {
+                        "Value": "\"{{VALIDATION_STRING}}\""
+                    }
+                ]
+            }
+        }
+    ]
+}
