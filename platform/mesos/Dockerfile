@@ -18,3 +18,8 @@ RUN ../configure && \
     make
 
 EXPOSE 5050
+
+ADD ./init.sh ./
+RUN apt-get install -qqy curl jq docker.io && \
+    chmod +x ./init.sh
+RUN mkdir /mesos/workdir/
