@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# if no asg is supplied, use the instance metadata to find the asg name.
+if [ -z "$1" ]; then
+    ASG=$(curl http://169.254.169.254/latest/meta-data/instance-id -s |
+    xargs aws autoscaling describe-auto-scaling-instances --instance-ids |\
+    jq '.AutoScalingInstances[].AutoScalingGroupName' -r)
+
+# otherwise, use the supplied asg name.
+else
+    ASG=$1
+fi
+
+# now use the asg name to find the list of peers
+aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $ASG |\
+    jq '.AutoScalingGroups[].Instances[].InstanceId' --raw-output |\
+    xargs aws ec2 describe-instances --instance-ids |\
+    jq '.Reservations[].Instances[].PrivateIpAddress' --raw-output |\
+    tr '\n' ',' | sed 's/,$/\n/'
