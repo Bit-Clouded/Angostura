@@ -25,4 +25,4 @@ sed -i "s/{{docker-log-group}}/$DOCKER_LOG/g" ./ls-aws-cwl.conf
 sed -i "s/{{syslog-log-group}}/$SYSLOG/g" ./ls-aws-cwl.conf
 sed -i "s/{{authlog-log-group}}/$AUTHLOG/g" ./ls-aws-cwl.conf
 
-logstash -f ./ls-aws-cwl.conf
+logstash -f ./ls-aws-cwl.conf --verbose
