@@ -142,6 +142,20 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
   end
 
   public
+  def process_files(queue)
+    objects = list_new_files
+
+    objects.each do |key|
+      if stop?
+        break
+      else
+        @logger.debug("S3 input processing", :bucket => @bucket, :key => key)
+        process_log(queue, key)
+      end
+    end
+  end # def process_files
+
+  public
   def stop
     # @current_thread is initialized in the `#run` method,
     # this variable is needed because the `#stop` is a called in another thread
@@ -196,6 +210,10 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
         end
       end
     end
+    # #ensure any stateful codecs (such as multi-line ) are flushed to the queue
+    @codec.flush do |event|
+      queue << event
+    end
 
     return true
   end # def process_local_log
@@ -217,7 +235,7 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
     line.start_with?('#Fields: ')
   end
 
-  private
+  private 
   def update_metadata(metadata, event)
     line = event.get('message').strip
 
@@ -232,8 +250,10 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
 
   private
   def read_file(filename, &block)
-    if gzip?(filename)
+    if gzip?(filename) 
       read_gzip_file(filename, block)
+    elsif zip?(filename)
+      read_zip_file(filename, block)
     else
       read_plain_file(filename, block)
     end
@@ -251,20 +271,7 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
     File.open(filename) do |zio|
       while true do
         io = Zlib::GzipReader.new(zio)
-        begin
-          Timeout::timeout(10) do
-            @logger.info("Start processing content...")
-            Thread.new{
-              begin
-                io.each_line { |line| block.call(line) }
-              rescue
-                @logger.info("Processing thread crash")
-              end
-            }.join
-          end
-        rescue Timeout::Error
-          @logger.info("Timed out")
-        end
+        io.each_line { |line| block.call(line) }
         unused = io.unused
         io.finish
         break if unused.nil?
@@ -277,12 +284,30 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
   end
 
   private
+  def read_zip_file(filename, block)
+    Zip::File.open(filename) do |zip_file|
+      # Handle entries one by one
+      zip_file.each do |entry|
+        entry.get_input_stream.each { |line| block.call(line, {"zip_entry_filename" => entry.name}) }
+      end
+    end
+  rescue Zip::Error => e
+    @logger.error("Zip codec: We cannot uncompress the zip file", :filename => filename)
+    raise e
+  end
+
+  private
   def gzip?(filename)
     filename.end_with?('.gz')
   end
 
   private
-  def sincedb
+  def zip?(filename)
+    filename.end_with?('.zip')
+  end
+
+  private
+  def sincedb 
     @sincedb ||= if @sincedb_path.nil?
                     @logger.info("Using default generated file for the sincedb", :filename => sincedb_file)
                     SinceDB::File.new(sincedb_file)
@@ -394,3 +419,4 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
     end
   end
 end # class LogStash::Inputs::S3
+
