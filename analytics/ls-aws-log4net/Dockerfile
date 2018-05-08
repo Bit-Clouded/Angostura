@@ -5,6 +5,7 @@ RUN logstash-plugin install logstash-input-kinesis && \
     logstash-plugin install logstash-codec-cloudwatch_logs
 
 WORKDIR /usr/share/logstash/config
+ADD logstash.yml /usr/share/logstash/config/
 ADD ls-aws-log4net.conf ./
 ADD entrypoint.sh ./
 USER root

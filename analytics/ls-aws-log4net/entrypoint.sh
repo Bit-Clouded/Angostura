@@ -12,9 +12,9 @@ echo Docker Log Group Name: $DOCKER_LOG
 echo =====================================
 echo Region: $EC2_REGION
 
-sed -i "s/{{aws-region}}/$EC2_REGION/g" ./ls-aws-cwl.conf
-sed -i "s/{{stream-name}}/$KINESIS_STREAM_NAME/g" ./ls-aws-cwl.conf
-sed -i "s/{{checkpoint-ddb}}/$KINESIS_CHECKPOINT/g" ./ls-aws-cwl.conf
-sed -i "s/{{es-host}}/$ES_HOST/g" ./ls-aws-cwl.conf
+sed -i "s/{{aws-region}}/$EC2_REGION/g" ./ls-aws-log4net.conf
+sed -i "s/{{stream-name}}/$KINESIS_STREAM_NAME/g" ./ls-aws-log4net.conf
+sed -i "s/{{checkpoint-ddb}}/$KINESIS_CHECKPOINT/g" ./ls-aws-log4net.conf
+sed -i "s/{{es-host}}/$ES_HOST/g" ./ls-aws-log4net.conf
 
 logstash -f ./ls-aws-log4net.conf --verbose
