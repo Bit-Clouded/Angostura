@@ -21,6 +21,6 @@
     ],
     "provisioners": [{
         "type": "shell",
-        "scripts": ["install-docker.sh","install-ssm-agent.sh"]
+        "scripts": ["install-docker.sh"]
     }]
 }
