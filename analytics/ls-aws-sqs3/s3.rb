@@ -29,6 +29,7 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
   # Polling frequency, default is 0 seconds
   config :polling_frequency, :validate => :number, :default => 0
   config :visibility_timeout, :validate => :number, :default => 3600
+  config :max_number_of_messages, :validate => :number, :default => 1
   config :delete_queue_item, :validate => :boolean, :default => true
   #end sqs#
 
@@ -89,7 +90,7 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
   def run(queue)
     @current_thread = Thread.current
 
-    @poller.poll(max_number_of_messages: 10, skip_delete: true, visibility_timeout: @visibility_timeout) do |messages|
+    @poller.poll(max_number_of_messages: @max_number_of_messages, skip_delete: true, visibility_timeout: @visibility_timeout) do |messages|
       messages.each do |msg|
         body = JSON.parse(msg.body)
         inner_msg = JSON.parse(body["Message"])
