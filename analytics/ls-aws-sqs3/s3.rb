@@ -29,7 +29,8 @@ class LogStash::Inputs::S3 < LogStash::Inputs::Base
   # Polling frequency, default is 0 seconds
   config :polling_frequency, :validate => :number, :default => 0
   config :visibility_timeout, :validate => :number, :default => 3600
-  config :max_number_of_messages, :validate => :number, :default => 1
+  # this need to be 2 or greater or sqs client returns a singular object and .each call fails. So retarded.
+  config :max_number_of_messages, :validate => :number, :default => 2
   config :delete_queue_item, :validate => :boolean, :default => true
   #end sqs#
 

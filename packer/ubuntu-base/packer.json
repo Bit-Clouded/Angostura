@@ -1,6 +1,6 @@
 {
     "variables": {
-        "source_ami": "ami-785db401",
+        "source_ami": "ami-2a7d75c0",
         "name": "ubuntu-lts-16.04-base",
         "ssh_username": "ubuntu"
     },
@@ -21,6 +21,6 @@
     ],
     "provisioners": [{
         "type": "shell",
-        "scripts": ["install-docker.sh","install-ssm-agent.sh"]
+        "scripts": ["install-docker.sh"]
     }]
 }
