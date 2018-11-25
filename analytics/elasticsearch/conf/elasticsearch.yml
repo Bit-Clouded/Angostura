@@ -1,3 +1,0 @@
-network.host: 0.0.0.0
-discovery.type: ec2
-cluster.routing.allocation.awareness.attributes: rack_id

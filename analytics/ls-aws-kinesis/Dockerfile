@@ -1,4 +1,4 @@
-FROM docker.elastic.co/logstash/logstash-oss:6.1.1
+FROM docker.elastic.co/logstash/logstash-oss:6.5.1
 
 RUN logstash-plugin install logstash-input-kinesis && \
     logstash-plugin install logstash-output-elasticsearch && \

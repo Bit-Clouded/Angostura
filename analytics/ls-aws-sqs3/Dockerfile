@@ -1,4 +1,4 @@
-FROM docker.elastic.co/logstash/logstash:6.1.1
+FROM docker.elastic.co/logstash/logstash:6.5.1
 
 USER root
 RUN mkdir -p /bc/temp/

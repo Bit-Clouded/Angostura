@@ -22,7 +22,7 @@ cat <<- EOF > /opt/exhibitor/defaults.conf
 	auto-manage-instances-settling-period-ms=0
 	auto-manage-instances=1
 	auto-manage-instances-fixed-ensemble-size=0
-        backup-extra=throttle\=&bucket-name\=${S3_BUCKET}&key-prefix\=data/&max-retries\=4&retry-sleep-ms\=30000
+	backup-extra=throttle\=&bucket-name\=${S3_BUCKET}&key-prefix\=data/&max-retries\=4&retry-sleep-ms\=30000
 EOF
 
 if [[ -n ${ZK_PASSWORD} ]]; then
