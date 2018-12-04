@@ -7,7 +7,7 @@ ARG arcanist_hash=e7906e47cba2006fa46553d462abf1f685845f20
 RUN apt-get update -q && \
     apt-get install -y -q unzip curl sudo && \
     apt-get install -y -q git mercurial subversion python-pygments dpkg-dev && \
-    apt-get install -y -q php7.0 php7.0-mysql php7.0-gd php7.0-dev php7.0-curl php-apc php7.0-cli php7.0-json php7.0-fpm
+    apt-get install -y -q php7.0 php7.0-mysql php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-json php7.0-fpm
 	
 RUN mkdir /home/local && mkdir /home/local/storage
 WORKDIR /home/local
