@@ -12,6 +12,7 @@
       "winrm_username": "Administrator",
       "winrm_use_ssl": true,
       "winrm_insecure": true,
+      "ami_groups": "all",
 	    "ami_regions": [
         "us-east-1",
         "us-east-2",
