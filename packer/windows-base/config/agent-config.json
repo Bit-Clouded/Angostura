@@ -12,7 +12,55 @@
 							"ERROR",
 							"CRITICAL"
 						],
+						"event_name": "Application",
+						"log_group_name":"{LogGroupName}"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "Security",
+						"log_group_name":"{LogGroupName}"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "Setup",
+						"log_group_name":"{LogGroupName}"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
 						"event_name": "System",
+						"log_group_name":"{LogGroupName}"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "Forwarded Events",
 						"log_group_name":"{LogGroupName}"
 					}
 				]
