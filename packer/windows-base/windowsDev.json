@@ -1,0 +1,27 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "eu-west-1",
+      "source_ami": "ami-0ba0b60f053f0978e",
+      "instance_type": "m3.medium",
+      "ssh_username": "ubuntu",
+      "ami_name": "packerwindows-devtesting-{{timestamp}}",
+	    "user_data_file":"./ec2-userdata.ps1",
+      "communicator": "winrm",
+      "winrm_username": "Administrator",
+      "winrm_use_ssl": true,
+      "winrm_insecure": true,
+	    "ami_regions": [
+        "us-east-1",
+        "us-west-1"
+      ]
+    }
+  ],
+  "provisioners": [
+        {
+            "type": "powershell",
+            "script": "init.ps1"
+        }
+    ]
+}
