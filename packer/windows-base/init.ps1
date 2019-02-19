@@ -22,7 +22,7 @@ catch { "Cloud watch agent installation failed" }
 
 
 $wr2Parameters = @{
-    Uri = 'https://prod-cicdshared-utility-1hzwhron259.s3-eu-west-1.amazonaws.com/CloudWatchAgentConfig/agent-config.json'
+    Uri = 'https://prod-cicdshared-utility-1hzwhron259mj.s3-eu-west-1.amazonaws.com/CloudWatchAgentConfig/agent-config.json'
     OutFile = "C:\Program Files\Amazon\AmazonCloudWatchAgent\agent-config.json"
 }
 
@@ -32,7 +32,7 @@ catch { "Download cloudwatch agent config file failed." }
 
 
 $wr3Parameters = @{
-    Uri = 'https://prod-cicdshared-utility-1hzwhron259.s3-eu-west-1.amazonaws.com/CloudWatchAgentConfig/configureCloudWatch.ps1'
+    Uri = 'https://prod-cicdshared-utility-1hzwhron259mj.s3-eu-west-1.amazonaws.com/CloudWatchAgentConfig/configureCloudWatch.ps1'
     OutFile = "C:\Program Files\Amazon\AmazonCloudWatchAgent\configureCloudWatch.ps1"
 }
 
