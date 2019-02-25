@@ -63,24 +63,97 @@
 			"InstanceType": "${aws:InstanceType}"
 		},
 		"metrics_collected": {
-			"Memory": {
+			"LogicalDisk": {
 				"measurement": [
-					"% Committed Bytes In Use"
-				],
-				"metrics_collection_interval": 60
-			},
-			"Paging File": {
-				"measurement": [
-					"% Usage"
+					"% Free Space"
 				],
 				"metrics_collection_interval": 60,
 				"resources": [
 					"*"
 				]
 			},
+			"Memory": {
+				"measurement": [
+					"% Committed Bytes In Use",
+					"Available MBytes",
+					"Pages/sec"
+				],
+				"metrics_collection_interval": 2
+			},
+			"Network Interface": {
+				"measurement": [
+					"Bytes Sent/sec",
+					"Bytes Received/sec",
+					"Packets Sent/sec",
+					"Packets Received/sec"
+				],
+				"metrics_collection_interval": 2,
+				"resources": [
+					"*"
+				]
+			},
+			"Paging File": {
+				"measurement": [
+					"% Usage"
+				],
+				"metrics_collection_interval": 2,
+				"resources": [
+					"*"
+				]
+			},
+			"PhysicalDisk": {
+				"measurement": [
+					"% Disk Time",
+					"Disk Write Bytes/sec",
+					"Disk Read Bytes/sec",
+					"Disk Writes/sec",
+					"Disk Reads/sec",
+					"% Idle Time",
+					"Avg. Disk sec/Read",
+					"Avg. Disk sec/Write",
+					"Current disk queue length"
+				],
+				"metrics_collection_interval": 2,
+				"resources": [
+					"*"
+				]
+			},
+			"Processor": {
+				"measurement": [
+					"% Processor Time",
+					"% User Time",
+					"% Idle Time",
+					"% Interrupt Time"
+				],
+				"metrics_collection_interval": 2,
+				"resources": [
+					"*"
+				]
+			},
+			"System": {
+				"measurement": [
+					"Processor Queue Length"
+				],
+				"metrics_collection_interval": 2,
+				"resources": [
+					"*"
+				]
+			},
+			"TCPv4": {
+				"measurement": [
+					"Connections Established"
+				],
+				"metrics_collection_interval": 2
+			},
+			"TCPv6": {
+				"measurement": [
+					"Connections Established"
+				],
+				"metrics_collection_interval": 2
+			},
 			"statsd": {
-				"metrics_aggregation_interval": 60,
-				"metrics_collection_interval": 10,
+				"metrics_aggregation_interval": 10,
+				"metrics_collection_interval": 5,
 				"service_address": ":8125"
 			}
 		}
