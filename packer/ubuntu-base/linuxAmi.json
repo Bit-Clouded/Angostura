@@ -1,7 +1,7 @@
 {
     "variables": {
         "source_ami": "ami-00035f41c82244dab",
-        "name": "ubuntu-lts-18.04-base",
+        "name": "packer-linux-devtesting",
         "ssh_username": "ubuntu"
     },
     "builders": [
@@ -21,6 +21,6 @@
     ],
     "provisioners": [{
         "type": "shell",
-        "scripts": ["install-docker.sh"]
+        "scripts": ["init.sh"]
     }]
 }
