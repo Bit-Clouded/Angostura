@@ -39,5 +39,10 @@
     "provisioners": [{
         "type": "shell",
         "scripts": ["init.sh"]
+    },
+    {
+        "type": "file",
+        "source": "/config/linux-agent-config.json",
+        "destination": "/opt/aws/amazon-cloudwatch-agent/bin/linux-agent-config.json"
     }]
 }
