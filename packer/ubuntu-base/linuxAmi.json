@@ -40,7 +40,7 @@
         {
             "type": "file",
             "source": "{{template_dir}}/config/linux-agent-config.json",
-            "destination": "/opt/aws/amazon-cloudwatch-agent/bin/"
+            "destination": "/etc/linux-agent-config.json"
         },
         {
         "type": "shell",

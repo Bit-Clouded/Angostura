@@ -6,12 +6,12 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-
 #install the package 
 sudo dpkg -i -E ./amazon-cloudwatch-agent.deb 
 
-#download config json and config script
-#JC suggests using the file provisioner to move transfer these files 
-
+sudo cp /etc/linux-agent-config.json /opt/aws/amazon-cloudwatch-agent/bin/linux-agent-config.json
 
 #configure cloudwatch-agent
 cd /opt/aws/amazon-cloudwatch-agent/bin/
+
+
 sudo amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:linux-agent-config.json -s
 
 #install docker
