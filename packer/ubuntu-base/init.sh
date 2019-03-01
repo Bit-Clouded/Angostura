@@ -35,3 +35,10 @@ sudo add-apt-repository \
 sudo apt-get update
 
 sudo apt-get -y install docker-ce containerd.io
+
+
+
+
+cd /tmp
+sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+sudo start amazon-ssm-agent

@@ -1,7 +1,7 @@
 {
     "variables": {
         "source_ami": "ami-00035f41c82244dab",
-        "name": "packer-linux-devtesting",
+        "name": "bc-ubuntu-lts-16.04-base",
         "ssh_username": "ubuntu"
     },
     "builders": [
@@ -16,7 +16,8 @@
             "ssh_username": "{{user `ssh_username`}}",
             "ssh_timeout": "10m",
             "ami_name": "{{user `name`}}-{{timestamp}}",
-            "ami_description": "Ubuntu LTS 18.04 with Docker and AWS SSM installed."
+            "ami_description": "Ubuntu LTS 18.04 with Docker and AWS SSM installed.",
+            "ami_groups": "all"
         }
     ],
     "provisioners": [{
