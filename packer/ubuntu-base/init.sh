@@ -17,7 +17,7 @@ sudo wget https://prod-cicdshared-utility-1hzwhron259mj.s3-eu-west-1.amazonaws.c
 #install docker
 sudo apt-get update
 
-sudo apt-get install \
+sudo apt-get -y install \
     apt-transport-https \
     ca-certificates \
     curl \
