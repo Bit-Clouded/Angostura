@@ -39,5 +39,5 @@ sudo apt-get -y install docker-ce containerd.io
 
 
 
-sudo snap install amazon-ssm-agent --classic
+sudo snap refresh amazon-ssm-agent --classic
 sudo snap services amazon-ssm-agent
