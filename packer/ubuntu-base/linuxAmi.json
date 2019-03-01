@@ -40,7 +40,7 @@
         {
             "type": "file",
             "source": "{{template_dir}}/config/linux-agent-config.json",
-            "destination": "/etc/linux-agent-config.json"
+            "destination": "/var/lib/linux-agent-config.json"
         },
         {
         "type": "shell",
