@@ -33,4 +33,4 @@ sudo add-apt-repository \
 
 sudo apt-get update
 
-sudo apt-get install docker-ce containerd.io
+sudo apt-get -y install docker-ce containerd.io
