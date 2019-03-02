@@ -6,13 +6,14 @@ wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-
 #install the package 
 sudo dpkg -i -E ./amazon-cloudwatch-agent.deb 
 
-sudo cp /tmp/linux-agent-config.json /opt/aws/amazon-cloudwatch-agent/bin/linux-agent-config.json
+
 
 #configure cloudwatch-agent
+sudo cp /tmp/linux-agent-config.json /opt/aws/amazon-cloudwatch-agent/bin/linux-agent-config.json
 cd /opt/aws/amazon-cloudwatch-agent/bin/
-
-
 sudo amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:linux-agent-config.json -s
+
+
 
 #install docker
 sudo apt-get update
@@ -37,6 +38,7 @@ sudo apt-get -y install docker-ce containerd.io
 
 
 
-
+# Update SSM agent with snap 
 sudo snap refresh amazon-ssm-agent --classic
 sudo snap services amazon-ssm-agent
+
