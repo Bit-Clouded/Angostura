@@ -1,4 +1,7 @@
 {
+        "agent": {
+                "metrics_collection_interval": 60
+              },
         "metrics": {
                 "append_dimensions": {
                         "AutoScalingGroupName": "${aws:AutoScalingGroupName}",
@@ -6,7 +9,12 @@
                         "InstanceId": "${aws:InstanceId}",
                         "InstanceType": "${aws:InstanceType}"
                 },
-                "metrics_collected": {
+                "metrics_collected": {                        
+                        "statsd": {
+                                "metrics_aggregation_interval": 60,
+                                "metrics_collection_interval": 60,
+                                "service_address": ":8125"
+                        },
                         "cpu": {
                                 "measurement": [
                                         "cpu_usage_idle",
@@ -14,7 +22,6 @@
                                         "cpu_usage_user",
                                         "cpu_usage_system"
                                 ],
-                                "metrics_collection_interval": 1,
                                 "resources": [
                                         "*"
                                 ],
@@ -25,9 +32,10 @@
                                         "used_percent",
                                         "inodes_free"
                                 ],
-                                "metrics_collection_interval": 1,
+                                "metrics_collection_interval": 300,
                                 "resources": [
-                                        "*"
+                                        "/mnt/*",
+                                        "/"
                                 ]
                         },
                         "diskio": {
@@ -38,34 +46,26 @@
                                         "writes",
                                         "reads"
                                 ],
-                                "metrics_collection_interval": 1,
                                 "resources": [
-                                        "*"
+                                        "/mnt/*",
+                                        "/"
                                 ]
                         },
                         "mem": {
                                 "measurement": [
                                         "mem_used_percent"
-                                ],
-                                "metrics_collection_interval": 1
+                                ]
                         },
                         "netstat": {
                                 "measurement": [
                                         "tcp_established",
                                         "tcp_time_wait"
-                                ],
-                                "metrics_collection_interval": 1
-                        },
-                        "statsd": {
-                                "metrics_aggregation_interval": 10,
-                                "metrics_collection_interval": 10,
-                                "service_address": ":8125"
+                                ]
                         },
                         "swap": {
                                 "measurement": [
                                         "swap_used_percent"
-                                ],
-                                "metrics_collection_interval": 1
+                                ]
                         }
                 }
         }
