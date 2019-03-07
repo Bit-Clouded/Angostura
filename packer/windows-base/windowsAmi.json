@@ -7,7 +7,7 @@
       "instance_type": "m3.medium",
       "ssh_username": "ubuntu",
       "ami_name": "bc-windows-server-2016-{{timestamp}}",
-	  "user_data_file":"./ec2-userdata.ps1",
+	    "user_data_file":"./ec2-userdata.ps1",
       "communicator": "winrm",
       "winrm_username": "Administrator",
       "winrm_use_ssl": true,

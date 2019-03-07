@@ -1,4 +1,7 @@
 {
+	"agent": {
+		"metrics_collection_interval": 60
+	},
 	"logs": {
 		"logs_collected": {
 			"windows_events": {
@@ -67,7 +70,7 @@
 				"measurement": [
 					"% Free Space"
 				],
-				"metrics_collection_interval": 60,
+				"metrics_collection_interval": 300,
 				"resources": [
 					"*"
 				]
@@ -77,8 +80,7 @@
 					"% Committed Bytes In Use",
 					"Available MBytes",
 					"Pages/sec"
-				],
-				"metrics_collection_interval": 2
+				]
 			},
 			"Network Interface": {
 				"measurement": [
@@ -87,7 +89,6 @@
 					"Packets Sent/sec",
 					"Packets Received/sec"
 				],
-				"metrics_collection_interval": 2,
 				"resources": [
 					"*"
 				]
@@ -96,7 +97,6 @@
 				"measurement": [
 					"% Usage"
 				],
-				"metrics_collection_interval": 2,
 				"resources": [
 					"*"
 				]
@@ -113,7 +113,6 @@
 					"Avg. Disk sec/Write",
 					"Current disk queue length"
 				],
-				"metrics_collection_interval": 2,
 				"resources": [
 					"*"
 				]
@@ -125,7 +124,6 @@
 					"% Idle Time",
 					"% Interrupt Time"
 				],
-				"metrics_collection_interval": 2,
 				"resources": [
 					"*"
 				]
@@ -134,7 +132,6 @@
 				"measurement": [
 					"Processor Queue Length"
 				],
-				"metrics_collection_interval": 2,
 				"resources": [
 					"*"
 				]
@@ -142,14 +139,12 @@
 			"TCPv4": {
 				"measurement": [
 					"Connections Established"
-				],
-				"metrics_collection_interval": 2
+				]
 			},
 			"TCPv6": {
 				"measurement": [
 					"Connections Established"
-				],
-				"metrics_collection_interval": 2
+				]
 			},
 			"statsd": {
 				"metrics_aggregation_interval": 10,
