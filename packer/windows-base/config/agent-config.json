@@ -82,17 +82,6 @@
 					"Pages/sec"
 				]
 			},
-			"Network Interface": {
-				"measurement": [
-					"Bytes Sent/sec",
-					"Bytes Received/sec",
-					"Packets Sent/sec",
-					"Packets Received/sec"
-				],
-				"resources": [
-					"*"
-				]
-			},
 			"Paging File": {
 				"measurement": [
 					"% Usage"
