@@ -8,10 +8,8 @@ sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
 
 
 
-#configure cloudwatch-agent
+echo Copy config from tmp folder...
 sudo cp /tmp/linux-agent-config.json /opt/aws/amazon-cloudwatch-agent/bin/linux-agent-config.json
-cd /opt/aws/amazon-cloudwatch-agent/bin/
-sudo amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:linux-agent-config.json -s
 
 
 
