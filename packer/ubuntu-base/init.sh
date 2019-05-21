@@ -21,7 +21,8 @@ sudo apt-get -y install \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common
+    software-properties-common \
+	chrony
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
@@ -40,3 +41,6 @@ sudo apt-get -y install docker-ce containerd.io
 sudo snap refresh amazon-ssm-agent --classic
 sudo snap services amazon-ssm-agent
 
+#configure ntp
+sudo sed -i '1s/^/server 169.254.169.123 prefer iburst minpoll 4 maxpoll 4\n/' /etc/chrony/chrony.conf
+sudo /etc/init.d/chrony restart
