@@ -4,9 +4,9 @@ ARG NGINX_BASE_DIGEST=
 FROM nginx:$NGINX_BASE$NGINX_BASE_DIGEST
 
 RUN apt-get update -q && \
-    apt-get install -y -q unzip curl sudo && \
-    apt-get install -y -q git mercurial subversion python-pygments dpkg-dev && \
-    apt-get install -y -q php7.0 php7.0-mysql php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-json php7.0-fpm
+    apt-get install -qqy unzip curl sudo && \
+    apt-get install -qqy git mercurial subversion python-pygments dpkg-dev && \
+    apt-get install -qqy php7.0 php7.0-mysql php7.0-gd php7.0-dev php7.0-curl php7.0-cli php7.0-json php7.0-fpm
 	
 RUN mkdir /home/local && mkdir /home/local/storage
 WORKDIR /home/local
