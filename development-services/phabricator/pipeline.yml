@@ -15,7 +15,7 @@ resources:
     type: registry-image
     source:
       repository: nginx
-      tag: alpine
+      #tag: alpine
   - name: builder-task
     type: registry-image
     source:
@@ -121,10 +121,11 @@ jobs:
               - -c
               - |
                 # fill in args for dockerfile
-                NGINX_BASE=$(cat ./nginx-alpine/tag)
-                NGINX_BASE_DIGEST=$(cat ./nginx-alpine/digest)
-                TAG=$(cat ./container-test-semver-phabricator/number)
-                CONTEXT=$PWD/github-angostura-phabricator/development-services/phabricator
+                export BUILD_ARG_NGINX_BASE=$(cat ./nginx-alpine/tag)
+                echo $BUILD_ARG_NGINX_BASE
+                export BUILD_ARG_NGINX_BASE_DIGEST="@$(cat ./nginx-alpine/digest)"
+                export TAG=$(cat ./container-test-semver-phabricator/number)
+                export CONTEXT=$PWD/github-angostura-phabricator/development-services/phabricator
                 
                 # copy built bin into dockerfile
                 git clone ./github-phabricator $CONTEXT/phabricator && rm -rf $CONTEXT/phabricator/.git

@@ -1,7 +1,7 @@
-ARG NGINX_BASE=nginx:alpine
+ARG NGINX_BASE=alpine
 ARG NGINX_BASE_DIGEST=
 
-FROM $NGINX_BASE$NGINX_BASE_DIGEST
+FROM nginx:$NGINX_BASE$NGINX_BASE_DIGEST
 
 RUN apt-get update -q && \
     apt-get install -y -q unzip curl sudo && \
