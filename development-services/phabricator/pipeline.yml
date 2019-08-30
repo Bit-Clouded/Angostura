@@ -5,7 +5,7 @@ aws-config: &aws-config
 test-bucket: &test-bucket
   << : *aws-config
   bucket: ((default-cicd-bucket))
-  region_name: eu-west-1
+  region_name: us-west-2
 
 resources:
   # docker input
@@ -43,12 +43,12 @@ resources:
     type: git
     source:
       uri: https://github.com/Bit-Clouded/Angostura.git
-      paths: ['development-services/phabricator/*', 'development-services/phabricator/**/*', 'development-services/phabricator/build-task.yml']
+      branch: feature/phabricator-ha
   - name: container-test-semver-phabricator
     type: semver
     source:
       << : *test-bucket
-      key: aws-machete/semver-test-0.0
+      key: angostura/phabricator/semver-test-0.0
       initial_version: 0.0.0
   - name: test-image-phabricator
     type: registry-image
@@ -60,7 +60,7 @@ resources:
     type: semver
     source:
       << : *test-bucket
-      key: aws-machete/semver-prod-0.0
+      key: angostura/phabricator/semver-prod-0.0
       initial_version: 0.0.0
   - name: prod-image-phabricator
     type: registry-image
@@ -155,20 +155,20 @@ jobs:
         trigger: false
         params:
           format: oci
-      - get: container-test-semver
+      - get: container-test-semver-phabricator
         trigger: false
-        passed: ['promote-to-rc']
+        passed: ['docker-build-phabricator']
         params: {bump: final}
-      - put: rc-image
+      - put: prod-image-phabricator
         params:
           image: test-image-phabricator/image.tar
           additional_tags: container-test-semver/number
-      - put: container-prod-semver
+      - put: container-prod-semver-phabricator
         params:
-          file: container-test-semver/number
-      - put: container-prod-semver
+          file: container-test-semver-phabricator/number
+      - put: container-prod-semver-phabricator
         params:
           bump: patch
-      - put: container-test-semver
+      - put: container-test-semver-phabricator
         params:
           file: container-prod-semver/number
