@@ -1,0 +1,174 @@
+aws-config: &aws-config
+  access_key_id: ((aws-key-id))
+  secret_access_key: ((aws-key-secret))
+
+test-bucket: &test-bucket
+  << : *aws-config
+  bucket: ((default-cicd-bucket))
+  region_name: eu-west-1
+
+resources:
+  # docker input
+  - name: nginx-alpine
+    # we are separating the cli base image from the build base image.
+    # this allows us to pinpoint if an issue caused by the image affects the build or the run time.
+    type: registry-image
+    source:
+      repository: nginx
+      tag: alpine
+  - name: builder-task
+    type: registry-image
+    source:
+      repository: concourse/builder-task
+
+  # phabricator stable github source
+  - name: github-phabricator
+    type: git
+    source:
+      uri: https://github.com/phacility/phabricator.git
+      branch: stable
+  - name: github-arcanist
+    type: git
+    source:
+      uri: https://github.com/phacility/arcanist.git
+      branch: stable
+  - name: github-libphutil
+    type: git
+    source:
+      uri: https://github.com/phacility/libphutil.git
+      branch: stable
+  
+  # phabricator input
+  - name: github-angostura-phabricator
+    type: git
+    source:
+      uri: https://github.com/Bit-Clouded/Angostura.git
+      paths: ['development-services/phabricator/*', 'development-services/phabricator/**/*', 'development-services/phabricator/build-task.yml']
+  - name: container-test-semver-phabricator
+    type: semver
+    source:
+      << : *test-bucket
+      key: aws-machete/semver-test-0.0
+      initial_version: 0.0.0
+  - name: test-image-phabricator
+    type: registry-image
+    source:
+      repository: bitcloudedci/phabricator
+      username: ((dh-username))
+      password: ((dh-password))
+  - name: container-prod-semver-phabricator
+    type: semver
+    source:
+      << : *test-bucket
+      key: aws-machete/semver-prod-0.0
+      initial_version: 0.0.0
+  - name: prod-image-phabricator
+    type: registry-image
+    source:
+      repository: bitclouded/phabricator
+      username: ((dh-username))
+      password: ((dh-password))
+
+jobs:
+  - name: docker-build-phabricator
+    public: true
+    plan:
+      - get: container-test-semver-phabricator
+        trigger: false
+        params: {pre: test}
+      - get: github-angostura-phabricator
+        trigger: true
+      - get: github-phabricator
+        trigger: true
+      - get: github-arcanist
+        trigger: true
+      - get: github-libphutil
+        trigger: true
+      - get: nginx-alpine
+        trigger: false
+        params:
+          format: oci
+      - get: builder-task
+        trigger: false
+      - task: assemble
+        image: builder-task
+        privileged: true
+        config:
+          platform: linux
+          params:
+            REPOSITORY: bitcloudedci/phabricator
+            #TAG: latest <- overriden using script
+            #CONTEXT: github-machete-dockerfile <- overriden using script
+          inputs:
+            - name: container-test-semver-phabricator
+            - name: github-angostura-phabricator
+            - name: nginx-alpine
+            # phabricator sources
+            - name: github-phabricator
+            - name: github-arcanist
+            - name: github-libphutil
+          
+          outputs:
+          - name: image
+          
+          caches:
+          - path: cache
+          
+          run:
+            path: /bin/sh
+            dir: .
+            args:
+              - -c
+              - |
+                # fill in args for dockerfile
+                NGINX_BASE=$(cat ./nginx-alpine/tag)
+                NGINX_BASE_DIGEST=$(cat ./nginx-alpine/digest)
+                TAG=$(cat ./container-test-semver-phabricator/number)
+                CONTEXT=$PWD/github-angostura-phabricator/development-services/phabricator
+                
+                # copy built bin into dockerfile
+                git clone ./github-phabricator $CONTEXT/phabricator && rm -rf $CONTEXT/phabricator/.git
+                git clone ./github-arcanist $CONTEXT/arcanist && rm -rf $CONTEXT/arcanist/.git
+                git clone ./github-libphutil $CONTEXT/libphutil && rm -rf $CONTEXT/libphutil/.git
+
+                # build
+                cd $CONTEXT
+                mkdir image
+                build
+          
+                # copy to output folder
+                cd ../..
+                cp $CONTEXT/image/* ./image/
+      - put: test-image-phabricator
+        params:
+          image: image/image.tar
+          additional_tags: container-test-semver-phabricator/number
+      - put: container-test-semver-phabricator
+        params:
+          file: container-test-semver-phabricator/number
+
+  - name: docker-release-phabricator
+    public: true
+    plan:
+      - get: test-image-phabricator
+        passed: ['docker-build-phabricator']
+        trigger: false
+        params:
+          format: oci
+      - get: container-test-semver
+        trigger: false
+        passed: ['promote-to-rc']
+        params: {bump: final}
+      - put: rc-image
+        params:
+          image: test-image-phabricator/image.tar
+          additional_tags: container-test-semver/number
+      - put: container-prod-semver
+        params:
+          file: container-test-semver/number
+      - put: container-prod-semver
+        params:
+          bump: patch
+      - put: container-test-semver
+        params:
+          file: container-prod-semver/number
