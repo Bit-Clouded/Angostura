@@ -1,0 +1,51 @@
+{
+    "variables": {
+        "source_ami": "ami-03746875d916becc0",
+        "name": "bc-ubuntu-lts-16.04-base",
+        "ssh_username": "ubuntu"
+    },
+    "builders": [
+        {
+            "name": "{{user `name`}}",
+            "type": "amazon-ebs",
+            "region": "eu-west-1",
+            "vpc_id": "",
+            "subnet_id": "subnet-0899d641",
+            "source_ami": "{{user `source_ami`}}",
+            "instance_type": "t2.micro",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ssh_timeout": "10m",
+            "ami_name": "{{user `name`}}-{{timestamp}}",
+            "ami_description": "Ubuntu LTS 18.04 with Docker and AWS SSM installed.",
+            "ami_groups": "all",
+            "ami_regions": [
+                "us-east-1",
+                "us-east-2",
+                "us-west-1",
+                "us-west-2",
+                "ap-south-1",
+                "ap-southeast-1",
+                "ap-southeast-2",
+                "ap-northeast-1",
+                "ap-northeast-2",
+                "ca-central-1",   
+                "eu-central-1",
+                "eu-west-1",
+                "eu-west-2",
+                "sa-east-1"
+              ]
+        }
+    ],
+    "provisioners": [
+        
+        {
+            "type": "file",
+            "source": "{{template_dir}}/config/linux-agent-config.json",
+            "destination": "/tmp/linux-agent-config.json"
+        },
+        {
+        "type": "shell",
+        "scripts": ["init.sh"]
+        }
+    ]
+}

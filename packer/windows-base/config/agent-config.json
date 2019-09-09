@@ -1,0 +1,145 @@
+{
+	"agent": {
+		"metrics_collection_interval": 60
+	},
+	"logs": {
+		"logs_collected": {
+			"windows_events": {
+				"collect_list": [
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "Application",
+						"log_group_name":"{LogGroupName}"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "Security",
+						"log_group_name":"{LogGroupName}"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "Setup",
+						"log_group_name":"{LogGroupName}"
+					},
+					{
+						"event_format": "xml",
+						"event_levels": [
+							"VERBOSE",
+							"INFORMATION",
+							"WARNING",
+							"ERROR",
+							"CRITICAL"
+						],
+						"event_name": "System",
+						"log_group_name":"{LogGroupName}"
+					}
+				]
+			}
+		}
+	},
+	"metrics": {
+		"append_dimensions": {
+			"AutoScalingGroupName": "${aws:AutoScalingGroupName}",
+			"ImageId": "${aws:ImageId}",
+			"InstanceId": "${aws:InstanceId}",
+			"InstanceType": "${aws:InstanceType}"
+		},
+		"metrics_collected": {
+			"LogicalDisk": {
+				"measurement": [
+					"% Free Space"
+				],
+				"metrics_collection_interval": 300,
+				"resources": [
+					"*"
+				]
+			},
+			"Memory": {
+				"measurement": [
+					"% Committed Bytes In Use",
+					"Available MBytes",
+					"Pages/sec"
+				]
+			},
+			"Paging File": {
+				"measurement": [
+					"% Usage"
+				],
+				"resources": [
+					"*"
+				]
+			},
+			"PhysicalDisk": {
+				"measurement": [
+					"% Disk Time",
+					"Disk Write Bytes/sec",
+					"Disk Read Bytes/sec",
+					"Disk Writes/sec",
+					"Disk Reads/sec",
+					"% Idle Time",
+					"Avg. Disk sec/Read",
+					"Avg. Disk sec/Write",
+					"Current disk queue length"
+				],
+				"resources": [
+					"*"
+				]
+			},
+			"Processor": {
+				"measurement": [
+					"% Processor Time",
+					"% User Time",
+					"% Idle Time",
+					"% Interrupt Time"
+				],
+				"resources": [
+					"*"
+				]
+			},
+			"System": {
+				"measurement": [
+					"Processor Queue Length"
+				],
+				"resources": [
+					"*"
+				]
+			},
+			"TCPv4": {
+				"measurement": [
+					"Connections Established"
+				]
+			},
+			"TCPv6": {
+				"measurement": [
+					"Connections Established"
+				]
+			},
+			"statsd": {
+				"metrics_aggregation_interval": 10,
+				"metrics_collection_interval": 5,
+				"service_address": ":8125"
+			}
+		}
+	}
+}
