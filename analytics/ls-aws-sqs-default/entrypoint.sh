@@ -11,8 +11,11 @@ echo Warning Events: $WARNING_EVENTS
 echo =====================================
 echo Region: $EC2_REGION
 
+SQS_LOWERCASE = echo "$SQS" | sed -e 's/\(.*\)/\L\1/'
+
 sed -i "s/{{aws-region}}/$EC2_REGION/g" ./ls-aws-sqs3-default.conf
 sed -i "s/{{sqs-name}}/$SQS/g" ./ls-aws-sqs3-default.conf
+sed -i "s/{{sqs-name-lowercase}}/$SQS_LOWERCASE/g" ./ls-aws-sqs3-default.conf
 sed -i "s/{{es-host}}/$ES_HOST/g" ./ls-aws-sqs3-default.conf
 sed -i "s/{{critical-events}}/$CRITICAL_EVENTS/g" ./ls-aws-sqs3-default.conf
 sed -i "s/{{warning-events}}/$WARNING_EVENTS/g" ./ls-aws-sqs3-default.conf
