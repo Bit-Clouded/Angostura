@@ -3,7 +3,7 @@
     {
       "type": "amazon-ebs",
       "region": "eu-west-1",
-      "source_ami": "ami-0d9f415ea8fd0f529",
+      "source_ami": "ami-0f91d766ab1ea9b40",
       "instance_type": "m3.medium",
       "ssh_username": "ubuntu",
       "ami_name": "bc-windows-server-2016-{{timestamp}}",
