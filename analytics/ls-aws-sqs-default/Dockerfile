@@ -1,8 +1,6 @@
-FROM docker.elastic.co/logstash/logstash:6.5.1
+FROM docker.elastic.co/logstash/logstash-oss:6.5.1
 
 USER root
-
-RUN bin/logstash-plugin install --no-verify
 
 RUN mkdir -p /bc/temp/
 WORKDIR /bc/
