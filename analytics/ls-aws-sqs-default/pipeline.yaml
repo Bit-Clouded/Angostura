@@ -1,0 +1,218 @@
+groups: []
+resources:
+- name: builder-task
+  type: registry-image
+  source:
+    repository: concourse/builder-task
+- name: concourse-pipeline
+  type: concourse-pipeline
+  source:
+    teams:
+    - name: main
+      password: ((concourse-main-password))
+      username: ((concourse-main-username))
+- name: container-prod-semver
+  type: semver
+  source:
+    access_key_id: ((aws-key-id))
+    bucket: ((default-cicd-bucket))
+    initial_version: 0.0.0
+    key: ls-aws-sqs-default/semver-prod-0.0
+    region_name: eu-west-1
+    secret_access_key: ((aws-key-secret))
+- name: container-rc-semver
+  type: semver
+  source:
+    access_key_id: ((aws-key-id))
+    bucket: ((default-cicd-bucket))
+    initial_version: 0.0.0
+    key: ls-aws-sqs-default/semver-rc-0.0
+    region_name: eu-west-1
+    secret_access_key: ((aws-key-secret))
+- name: container-test-semver
+  type: semver
+  source:
+    access_key_id: ((aws-key-id))
+    bucket: ((default-cicd-bucket))
+    initial_version: 0.0.0
+    key: ls-aws-sqs-default/semver-test-0.0
+    region_name: eu-west-1
+    secret_access_key: ((aws-key-secret))
+- name: github-ls-aws-sqs-default-dockerfile
+  type: git
+  source:
+    paths:
+    - docker/*
+    - docker/**/*
+    uri: https://github.com/imomou/Angostura.git
+- name: github-ls-aws-sqs-default-pipeline
+  type: git
+  source:
+    paths:
+    - analytics/ls-aws-sqs-default/pipeline.yml
+    uri: https://github.com/imomou/Angostura.git
+- name: github-ls-aws-sqs-default-s3
+  type: git
+  source:
+    paths:
+    - analytics/ls-aws-sqs-default/*
+    - analytics/ls-aws-sqs-default/**/*
+    uri: https://github.com/imomou/Angostura.git
+- name: ls-build
+  type: registry-image
+  source:
+    repository: docker.elastic.co/logstash
+    tag: logstash-oss
+- name: ls-cli
+  type: registry-image
+  source:
+    repository: docker.elastic.co/logstash
+    tag: logstash-oss
+- name: prod-image
+  type: registry-image
+  source:
+    password: ((dh-password))
+    repository: bitclouded/ls-aws-sqs-default
+    username: ((dh-username))
+- name: rc-image
+  type: registry-image
+  source:
+    password: ((dh-password))
+    repository: bitcloudedci/ls-aws-sqs-default
+    username: ((dh-username))
+- name: s3-artifact
+  type: s3
+  source:
+    access_key_id: ((aws-key-id))
+    bucket: ((default-cicd-bucket))
+    initial_path: ls-aws-sqs-default/s3-aaa
+    regexp: ls-aws-sqs-default/s3-(.*)
+    region_name: eu-west-1
+    secret_access_key: ((aws-key-secret))
+- name: test-image
+  type: registry-image
+  source:
+    password: ((dh-password))
+    repository: bitcloudedci/ls-aws-sqs-default
+    username: ((dh-username))
+resource_types:
+- name: concourse-pipeline
+  type: docker-image
+  source:
+    repository: concourse/concourse-pipeline-resource
+jobs:
+- name: set-pipelines
+  public: true
+  plan:
+  - get: github-ls-aws-sqs-default-pipeline
+    trigger: true
+  - put: concourse-pipeline
+    params:
+      pipelines:
+      - config_file: github-ls-aws-sqs-default-pipeline/pipeline.yml
+        name: ls-aws-sqs-default
+        team: main
+        unpaused: true
+- name: build-s3
+  public: true
+  plan:
+  - get: concourse-pipeline
+    passed:
+    - set-pipelines
+  - get: ls-build
+  - get: github-ls-aws-sqs-default-s3
+    trigger: true
+  - task: build
+    file: github-ls-aws-sqs-default-s3/build-task.yml
+    vars:
+      bin-name: s3
+      build-path: analytics/ls-aws-sqs-default
+      input: github-ls-aws-sqs-default-s3
+    image: golang-build
+  - put: s3-artifact
+    params:
+      acl: public-read
+      file: s3-*
+- name: docker-build
+  public: true
+  plan:
+  - get: container-test-semver
+    params:
+      pre: test
+  - get: s3-artifact
+    passed:
+    - build-s3
+    trigger: true
+  - get: github-ls-aws-sqs-default-dockerfile
+    trigger: true
+  - get: golang-cli
+    params:
+      format: oci
+  - get: builder-task
+  - task: assemble
+    privileged: true
+    file: github-ls-aws-sqs-default-dockerfile/docker/build-task.yml
+    vars:
+      docker-semver: container-test-semver
+      dockerfile: github-ls-aws-sqs-default-dockerfile
+      repository: bitcloudedci/ls-aws-sqs-default
+    image: builder-task
+  - put: test-image
+    params:
+      additional_tags: container-test-semver/number
+      image: image/image.tar
+  - put: container-test-semver
+    params:
+      file: container-test-semver/number
+- name: promote-to-rc
+  public: true
+  plan:
+  - get: test-image
+    passed:
+    - docker-build
+    params:
+      format: oci
+  - get: container-rc-semver
+    params:
+      pre: rc
+  - put: rc-image
+    params:
+      additional_tags: container-rc-semver/number
+      image: test-image/image.tar
+  - put: container-rc-semver
+    params:
+      file: container-rc-semver/number
+- name: promote-to-release
+  public: true
+  plan:
+  - get: rc-image
+    passed:
+    - promote-to-rc
+    params:
+      format: oci
+  - get: container-rc-semver
+    params:
+      bump: final
+  - put: prod-image
+    params:
+      additional_tags: container-rc-semver/number
+      image: rc-image/image.tar
+  - put: container-prod-semver
+    params:
+      file: container-rc-semver/number
+  - put: container-prod-semver
+    params:
+      bump: patch
+- name: reset-release-semvers
+  public: true
+  plan:
+  - get: container-prod-semver
+    passed:
+    - promote-to-release
+    trigger: true
+  - put: container-test-semver
+    params:
+      file: container-prod-semver/number
+  - put: container-rc-semver
+    params:
+      file: container-prod-semver/number
