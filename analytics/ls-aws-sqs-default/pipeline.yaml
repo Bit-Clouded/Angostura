@@ -145,7 +145,7 @@ jobs:
     trigger: true
   - get: github-ls-aws-sqs-default-dockerfile
     trigger: true
-  - get: golang-cli
+  - get: ls-cli
     params:
       format: oci
   - get: builder-task
