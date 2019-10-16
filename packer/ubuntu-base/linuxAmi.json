@@ -1,6 +1,6 @@
 {
     "variables": {
-        "source_ami": "ami-03746875d916becc0",
+        "source_ami": "ami-03ef731cc103c9f09",
         "name": "bc-ubuntu-lts-16.04-base",
         "ssh_username": "ubuntu"
     },
