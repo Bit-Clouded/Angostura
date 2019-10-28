@@ -46,3 +46,5 @@ sudo snap services amazon-ssm-agent
 sudo sed -i '1s/^/server 169.254.169.123 prefer iburst minpoll 4 maxpoll 4\n/' /etc/chrony/chrony.conf
 sudo /etc/init.d/chrony restart
 
+sudo cp /usr/bin/docker-init /sbin/docker-init
+
