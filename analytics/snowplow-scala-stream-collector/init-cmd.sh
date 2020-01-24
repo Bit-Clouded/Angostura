@@ -16,7 +16,7 @@ BYTE_THRESHOLD=2500
 RECORD_THRESHOLD=250
 TIME_THRESHOLD=250
 
-LOG_LEVEL=INFO
+LOG_LEVEL=WARN
 
 # Externally Fed Variables
 sed -i "s/{{collectorKinesisStreamGoodName}}/$STREAM_GOOD/g" ./config.hocon
