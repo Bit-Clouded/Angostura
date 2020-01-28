@@ -1,4 +1,4 @@
-FROM openjdk:8u111-jdk
+FROM openjdk:8u242-jdk
 
 RUN mkdir -p /snowplow
 WORKDIR /snowplow
