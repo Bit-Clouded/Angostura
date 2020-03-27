@@ -1,0 +1,23 @@
+platform: linux
+inputs:
+  - name: ((input))
+    path: ls-aws-sqs-default
+
+run:
+  path: /bin/sh
+  dir: ls-aws-sqs-default
+  args:
+    - -c
+    - |
+        set -e
+        USER root
+        
+        mkdir -p /bc/temp/
+        cd/bc/
+        cp ls-aws-sqs3-default.conf ./
+        cp entrypoint.sh ./
+        cp logstash.yml /usr/share/logstash/config/
+        chmod +x ./entrypoint.sh
+        
+outputs:
+  - name: bin
